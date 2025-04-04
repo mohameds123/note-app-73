@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1075954477464",
+    "project_id": "createnoteappdatabase73",
+    "storage_bucket": "createnoteappdatabase73.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1075954477464:android:6db4d0b3efe5b6c686a3ed",
+        "android_client_info": {
+          "package_name": "com.example.noteappflutteronline73"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyTFiluC-Bv27KBihUtpUD6zVw-JUER_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
