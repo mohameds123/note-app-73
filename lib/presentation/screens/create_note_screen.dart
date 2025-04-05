@@ -1,27 +1,35 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:noteappflutteronline73/core/colors_manager.dart';
-import 'package:noteappflutteronline73/logic/sign_up_cubit/cubit.dart';
-import 'package:noteappflutteronline73/logic/sign_up_cubit/state.dart';
+import 'package:noteappflutteronline73/data/note_model.dart';
+import 'package:noteappflutteronline73/logic/create_note/cubit.dart';
+import 'package:noteappflutteronline73/logic/create_note/state.dart';
 import 'package:noteappflutteronline73/presentation/screens/home_screen.dart';
 
-class SignUpScreen extends StatelessWidget {
-  SignUpScreen({super.key});
+import '../../core/colors_manager.dart';
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passController = TextEditingController();
+class CreateNoteScreen extends StatelessWidget {
+  CreateNoteScreen({super.key});
 
+  TextEditingController headLineController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SignUpCubit(),
-      child: BlocConsumer<SignUpCubit, SignUpStates>(
+      create: (context) => CreateNoteCubit(),
+      child: BlocConsumer<CreateNoteCubit, CreateNoteStates>(
         listener: (context, state) {
-          if(state is SignUpSuccessState){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
-          }
+          if(state is CreateNoteSuccessState){
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text("Note was created Successfully")));
 
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          }else if (state is CreateNoteErrorState){
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.em)));
+          }
         },
         builder: (context, state) {
           return Scaffold(
@@ -36,7 +44,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      "Create New Account ",
+                      "Create New Note ",
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -47,7 +55,7 @@ class SignUpScreen extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    "Email ",
+                    "headline ",
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -57,12 +65,11 @@ class SignUpScreen extends StatelessWidget {
                     height: 12,
                   ),
                   TextFormField(
-                    controller: emailController,
+                    controller: headLineController,
                     style: TextStyle(
                       color: Colors.white,
                     ),
                     decoration: InputDecoration(
-                        hintText: "example@gmail.com",
                         fillColor: ColorsManagers.lightPurple,
                         filled: true,
                         hintStyle: TextStyle(
@@ -75,7 +82,7 @@ class SignUpScreen extends StatelessWidget {
                     height: 12,
                   ),
                   Text(
-                    "password ",
+                    "Description ",
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -85,13 +92,11 @@ class SignUpScreen extends StatelessWidget {
                     height: 12,
                   ),
                   TextFormField(
-                    controller: passController,
-                    obscureText: true,
+                    controller: descriptionController,
                     style: TextStyle(
                       color: Colors.white,
                     ),
                     decoration: InputDecoration(
-                        hintText: "Enter Your password",
                         fillColor: ColorsManagers.lightPurple,
                         filled: true,
                         hintStyle: TextStyle(
@@ -104,7 +109,12 @@ class SignUpScreen extends StatelessWidget {
                   Center(
                     child: InkWell(
                       onTap: () {
-                        context.read<SignUpCubit>().signUp(emailController.text, passController.text);
+                        context.read<CreateNoteCubit>().createNoteData(
+                            NoteModel(
+                                headLine: headLineController.text,
+                                description: descriptionController.text,
+                                createdAt: DateTime.now()));
+
                       },
                       child: Container(
                         width: 312,
@@ -115,7 +125,7 @@ class SignUpScreen extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            "Sign Up",
+                            "Create",
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
