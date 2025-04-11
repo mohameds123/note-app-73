@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:noteappflutteronline73/core/colors_manager.dart';
+import 'package:noteappflutteronline73/data/note_model.dart';
 
 class NoteWidget extends StatelessWidget {
-  const NoteWidget({super.key});
+   NoteWidget({super.key, required this.data});
+  NoteModel data;
 
 
   @override
@@ -25,7 +27,7 @@ class NoteWidget extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "Meeting",
+                 data.headLine,
                   style: TextStyle(
                     color: Colors.white
                   ),
@@ -36,14 +38,14 @@ class NoteWidget extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      "Apple,Orange,Banana,Guava.",
+                      data.description,
                       style: TextStyle(
                           color: Colors.white
                       ),
                     ),
                     Spacer(),
                     Text(
-                      "9:00 pm",
+                      "${data.createdAt.hour}:${data.createdAt.minute}${data.createdAt.hour >= 12? " Pm":" Am"}",
                       style: TextStyle(
                           color: Colors.white
                       ),
