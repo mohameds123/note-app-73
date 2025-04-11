@@ -40,8 +40,11 @@ class CreateNoteScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 70,
+                    height: 40,
                   ),
+                  IconButton(onPressed: (){
+                    Navigator.pop(context);
+                  }, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
                   Center(
                     child: Text(
                       "Create New Note ",

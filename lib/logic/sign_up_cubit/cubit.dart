@@ -10,7 +10,7 @@ class SignUpCubit extends Cubit <SignUpStates>{
     emit(SignUpLoadingState());
     try{
 
-      FirebaseAuth.instance.createUserWithEmailAndPassword(email: userEmail, password: pass);
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: userEmail, password: pass);
       emit(SignUpSuccessState());
 
     }catch (e){
