@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:noteappflutteronline73/data/note_model.dart';
 import 'package:noteappflutteronline73/logic/create_note/cubit.dart';
 import 'package:noteappflutteronline73/logic/create_note/state.dart';
@@ -8,11 +12,121 @@ import 'package:noteappflutteronline73/presentation/screens/home_screen.dart';
 
 import '../../core/colors_manager.dart';
 
-class CreateNoteScreen extends StatelessWidget {
+class CreateNoteScreen extends StatefulWidget {
   CreateNoteScreen({super.key});
 
+  @override
+  State<CreateNoteScreen> createState() => _CreateNoteScreenState();
+}
+
+class _CreateNoteScreenState extends State<CreateNoteScreen> {
+  // 1- function to select media // image picker
   TextEditingController headLineController = TextEditingController();
+
   TextEditingController descriptionController = TextEditingController();
+
+  XFile ?selectedMedia;
+
+
+  Future selectMedia()async {
+    showDialog(context: context, builder: (context){
+      return AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Center(
+              child: InkWell(
+                onTap: () {
+                  choseMediaGallery();
+                },
+                child: Container(
+                  width: 312,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Gallery",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: ColorsManagers.primaryColor),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Center(
+              child: InkWell(
+                onTap: () {
+
+                  choseMediaCamera();
+                },
+                child: Container(
+                  width: 312,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Camera",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: ColorsManagers.primaryColor),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+          ],
+        ),
+      );
+    });
+  }
+
+  // for gallery
+  Future choseMediaGallery()async {
+    ImagePicker picker = ImagePicker();
+    XFile ?image = await picker.pickImage(source: ImageSource.gallery);
+    if(image != null){
+      setState(() {
+        selectedMedia = image;
+      });
+    }
+  }
+
+  // for camera
+  Future choseMediaCamera()async {
+    ImagePicker picker = ImagePicker();
+    XFile ?image  = await picker.pickImage(source: ImageSource.camera);
+    if(image != null){
+      setState(() {
+        selectedMedia = image;
+      });
+    }
+  }
+
+  Future <String?> uploadMedia() async {
+    // location
+   final location = FirebaseStorage.instance.ref().child("noteImage/");
+    // upload
+    await location.putFile(File(selectedMedia!.path));
+   // get upload URL
+    return location.getDownloadURL();
+
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -108,15 +222,61 @@ class CreateNoteScreen extends StatelessWidget {
                             fontWeight: FontWeight.w300),
                         border: InputBorder.none),
                   ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  if (selectedMedia != null)
+                  Center(child: Image.file(File(selectedMedia!.path),height: 300,)),
                   Spacer(),
+
                   Center(
                     child: InkWell(
                       onTap: () {
-                        context.read<CreateNoteCubit>().createNoteData(
-                            NoteModel(
-                                headLine: headLineController.text,
-                                description: descriptionController.text,
-                                createdAt: DateTime.now()));
+                        selectMedia();
+                      },
+                      child: Container(
+                        width: 312,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Select Media",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: ColorsManagers.primaryColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Center(
+                    child: InkWell(
+                      onTap: () async{
+                        if(selectedMedia != null){
+                          final mediaLink = await uploadMedia();
+                          context.read<CreateNoteCubit>().createNoteData(
+                              NoteModel(
+                                  headLine: headLineController.text,
+                                  description: descriptionController.text,
+                                  createdAt: DateTime.now(),
+                                mediaUrl:mediaLink,
+                              )
+                          );
+                        }else {
+                          context.read<CreateNoteCubit>().createNoteData(
+                              NoteModel(
+                                  headLine: headLineController.text,
+                                  description: descriptionController.text,
+                                  createdAt: DateTime.now()));
+                        }
+
 
                       },
                       child: Container(

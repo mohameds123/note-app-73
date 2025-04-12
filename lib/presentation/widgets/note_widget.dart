@@ -26,6 +26,7 @@ class NoteWidget extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
+
                 Text(
                  data.headLine,
                   style: TextStyle(
@@ -53,6 +54,11 @@ class NoteWidget extends StatelessWidget {
 
                   ],
                 ),
+                SizedBox(
+                  height: 8,
+                ),
+                if (data.mediaUrl != null)
+                Image.network(data.mediaUrl!)
               ],
             ),
           ),
