@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noteappflutteronline73/core/colors_manager.dart';
@@ -36,7 +37,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      "Create New Account ",
+                      "Create New Account ".tr(),
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -62,7 +63,7 @@ class SignUpScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                     decoration: InputDecoration(
-                        hintText: "example@gmail.com",
+                        hintText: "example@gmail.com".tr(),
                         fillColor: ColorsManagers.lightPurple,
                         filled: true,
                         hintStyle: TextStyle(
@@ -75,7 +76,7 @@ class SignUpScreen extends StatelessWidget {
                     height: 12,
                   ),
                   Text(
-                    "password ",
+                    "password ".tr(),
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -91,7 +92,7 @@ class SignUpScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                     decoration: InputDecoration(
-                        hintText: "Enter Your password",
+                        hintText: "Enter Your password".tr(),
                         fillColor: ColorsManagers.lightPurple,
                         filled: true,
                         hintStyle: TextStyle(
@@ -115,7 +116,7 @@ class SignUpScreen extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            "Sign Up",
+                            "Sign Up".tr(),
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,

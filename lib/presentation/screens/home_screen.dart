@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,14 @@ import '../widgets/note_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+  void _toggleLanguage(BuildContext context) {
+    final currentLocale = context.locale;
+    if (currentLocale.languageCode == 'en') {
+      context.setLocale(Locale('ar'));
+    } else {
+      context.setLocale(Locale('en'));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +33,24 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
+                height: 26,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.language, color: Colors.white),
+                      onPressed: () => _toggleLanguage(context),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
                 height: 42,
               ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -44,7 +69,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          "Add Note",
+                          "Add Note".tr(),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -74,7 +99,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          "Log Out",
+                          "Log Out".tr(),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

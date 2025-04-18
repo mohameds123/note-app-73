@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noteappflutteronline73/logic/login_in/cubit.dart';
@@ -21,7 +22,7 @@ class LoginScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is LoginSuccessState) {
             ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text("Login is Successfully")));
+                .showSnackBar(SnackBar(content: Text("Login is Successfully ".tr())));
 
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => HomeScreen()));
@@ -43,7 +44,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      "Hi, welcome back",
+                      "Hi, welcome back".tr(),
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -54,7 +55,7 @@ class LoginScreen extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    "Email ",
+                    "Email".tr(),
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -82,7 +83,7 @@ class LoginScreen extends StatelessWidget {
                     height: 12,
                   ),
                   Text(
-                    "password ",
+                    "password ".tr(),
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -98,7 +99,7 @@ class LoginScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                     decoration: InputDecoration(
-                        hintText: "Enter Your password",
+                        hintText: "Enter Your password".tr(),
                         fillColor: ColorsManagers.lightPurple,
                         filled: true,
                         hintStyle: TextStyle(
@@ -124,7 +125,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            "Login",
+                            "Login".tr(),
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -160,7 +161,7 @@ class LoginScreen extends StatelessWidget {
 
                             Center(
                               child: Text(
-                                "Continue With Google",
+                                "Continue With Google".tr(),
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
@@ -177,7 +178,7 @@ class LoginScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Don’t have an account ? ",
+                        "Don’t have an account ? ".tr(),
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -191,7 +192,7 @@ class LoginScreen extends StatelessWidget {
                                   builder: (context) => SignUpScreen()));
                         },
                         child: Text(
-                          "Sign Up",
+                          "Sign Up".tr(),
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

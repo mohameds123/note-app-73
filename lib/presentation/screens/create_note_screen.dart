@@ -9,6 +9,7 @@ import 'package:noteappflutteronline73/data/note_model.dart';
 import 'package:noteappflutteronline73/logic/create_note/cubit.dart';
 import 'package:noteappflutteronline73/logic/create_note/state.dart';
 import 'package:noteappflutteronline73/presentation/screens/home_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../core/colors_manager.dart';
 
@@ -20,113 +21,99 @@ class CreateNoteScreen extends StatefulWidget {
 }
 
 class _CreateNoteScreenState extends State<CreateNoteScreen> {
-  // 1- function to select media // image picker
   TextEditingController headLineController = TextEditingController();
-
   TextEditingController descriptionController = TextEditingController();
 
-  XFile ?selectedMedia;
+  XFile? selectedMedia;
 
-
-  Future selectMedia()async {
-    showDialog(context: context, builder: (context){
-      return AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Center(
-              child: InkWell(
-                onTap: () {
-                  choseMediaGallery();
-                },
-                child: Container(
-                  width: 312,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Gallery",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: ColorsManagers.primaryColor),
+  Future selectMedia() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Center(
+                  child: InkWell(
+                    onTap: () {
+                      choseMediaGallery();
+                    },
+                    child: Container(
+                      width: 312,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Gallery".tr(),
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: ColorsManagers.primaryColor),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Center(
-              child: InkWell(
-                onTap: () {
-
-                  choseMediaCamera();
-                },
-                child: Container(
-                  width: 312,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Camera",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: ColorsManagers.primaryColor),
+                SizedBox(height: 12),
+                Center(
+                  child: InkWell(
+                    onTap: () {
+                      choseMediaCamera();
+                    },
+                    child: Container(
+                      width: 312,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Camera".tr(),
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: ColorsManagers.primaryColor),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-
-          ],
-        ),
-      );
-    });
+          );
+        });
   }
 
-  // for gallery
-  Future choseMediaGallery()async {
+  Future choseMediaGallery() async {
     ImagePicker picker = ImagePicker();
-    XFile ?image = await picker.pickImage(source: ImageSource.gallery);
-    if(image != null){
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
       setState(() {
         selectedMedia = image;
       });
     }
   }
 
-  // for camera
-  Future choseMediaCamera()async {
+  Future choseMediaCamera() async {
     ImagePicker picker = ImagePicker();
-    XFile ?image  = await picker.pickImage(source: ImageSource.camera);
-    if(image != null){
+    XFile? image = await picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
       setState(() {
         selectedMedia = image;
       });
     }
   }
 
-  Future <String?> uploadMedia() async {
-    // location
-   final location = FirebaseStorage.instance.ref().child("noteImage/");
-    // upload
+  Future<String?> uploadMedia() async {
+    final location = FirebaseStorage.instance.ref().child("noteImage/");
     await location.putFile(File(selectedMedia!.path));
-   // get upload URL
     return location.getDownloadURL();
-
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -134,13 +121,13 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
       create: (context) => CreateNoteCubit(),
       child: BlocConsumer<CreateNoteCubit, CreateNoteStates>(
         listener: (context, state) {
-          if(state is CreateNoteSuccessState){
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text("Note was created Successfully")));
-
+          if (state is CreateNoteSuccessState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Note was created Successfully".tr())),
+            );
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => HomeScreen()));
-          }else if (state is CreateNoteErrorState){
+          } else if (state is CreateNoteErrorState) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.em)));
           }
@@ -148,44 +135,39 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
         builder: (context, state) {
           return Scaffold(
             backgroundColor: ColorsManagers.primaryColor,
+
             body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 40,
-                  ),
-                  IconButton(onPressed: (){
-                    Navigator.pop(context);
-                  }, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+                  SizedBox(height: 40),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.arrow_back_ios, color: Colors.white)),
                   Center(
                     child: Text(
-                      "Create New Note ",
+                      "Create New Note ".tr(),
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  SizedBox(height: 20),
                   Text(
-                    "headline ",
+                    "headline ".tr(),
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: Colors.white),
                   ),
-                  SizedBox(
-                    height: 12,
-                  ),
+                  SizedBox(height: 12),
                   TextFormField(
                     controller: headLineController,
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                    style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                         fillColor: ColorsManagers.lightPurple,
                         filled: true,
@@ -195,24 +177,18 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                             fontWeight: FontWeight.w300),
                         border: InputBorder.none),
                   ),
-                  SizedBox(
-                    height: 12,
-                  ),
+                  SizedBox(height: 12),
                   Text(
-                    "Description ",
+                    "Description ".tr(),
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: Colors.white),
                   ),
-                  SizedBox(
-                    height: 12,
-                  ),
+                  SizedBox(height: 12),
                   TextFormField(
                     controller: descriptionController,
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                    style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                         fillColor: ColorsManagers.lightPurple,
                         filled: true,
@@ -222,13 +198,12 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                             fontWeight: FontWeight.w300),
                         border: InputBorder.none),
                   ),
-                  SizedBox(
-                    height: 12,
-                  ),
+                  SizedBox(height: 12),
                   if (selectedMedia != null)
-                  Center(child: Image.file(File(selectedMedia!.path),height: 300,)),
+                    Center(
+                        child: Image.file(File(selectedMedia!.path),
+                            height: 300)),
                   Spacer(),
-
                   Center(
                     child: InkWell(
                       onTap: () {
@@ -243,7 +218,7 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                         ),
                         child: Center(
                           child: Text(
-                            "Select Media",
+                            "Select Media".tr(),
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -253,31 +228,26 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   Center(
                     child: InkWell(
-                      onTap: () async{
-                        if(selectedMedia != null){
+                      onTap: () async {
+                        if (selectedMedia != null) {
                           final mediaLink = await uploadMedia();
                           context.read<CreateNoteCubit>().createNoteData(
                               NoteModel(
-                                  headLine: headLineController.text,
-                                  description: descriptionController.text,
-                                  createdAt: DateTime.now(),
-                                mediaUrl:mediaLink,
-                              )
-                          );
-                        }else {
+                                headLine: headLineController.text,
+                                description: descriptionController.text,
+                                createdAt: DateTime.now(),
+                                mediaUrl: mediaLink,
+                              ));
+                        } else {
                           context.read<CreateNoteCubit>().createNoteData(
                               NoteModel(
                                   headLine: headLineController.text,
                                   description: descriptionController.text,
                                   createdAt: DateTime.now()));
                         }
-
-
                       },
                       child: Container(
                         width: 312,
@@ -288,7 +258,7 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                         ),
                         child: Center(
                           child: Text(
-                            "Create",
+                            "Create".tr(),
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -298,9 +268,7 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
+                  SizedBox(height: 30),
                 ],
               ),
             ),

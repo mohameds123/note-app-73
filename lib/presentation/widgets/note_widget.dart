@@ -57,8 +57,8 @@ class NoteWidget extends StatelessWidget {
                 SizedBox(
                   height: 8,
                 ),
-                if (data.mediaUrl != null)
-                Image.network(data.mediaUrl!)
+                 if (data.mediaUrl != "")
+                 Image.network(data.mediaUrl!)
               ],
             ),
           ),
