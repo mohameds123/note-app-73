@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:noteappflutteronline73/presentation/screens/home_screen.dart';
 import 'package:noteappflutteronline73/presentation/screens/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +25,12 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  Future <bool>  getLoginValue ()async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final logged = await prefs.getBool("logged");
+    return logged!;
+
+  }
 
   // This widget is the root of your application.
   @override
@@ -33,7 +41,7 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      home: LoginScreen(),
+      home: getLoginValue == true? HomeScreen() : LoginScreen(),
     );
   }
 }
